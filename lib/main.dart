@@ -1,6 +1,8 @@
+import 'package:counter_demo/providers/contact_provider.dart';
 import 'package:counter_demo/providers/counter_provider.dart';
 import 'package:counter_demo/providers/theme_provider.dart';
 import 'package:counter_demo/utils/constant.dart';
+import 'package:counter_demo/views/add_contact.dart';
 import 'package:counter_demo/views/home_page.dart';
 import 'package:counter_demo/views/intro_screen.dart';
 import 'package:flutter/material.dart';
@@ -24,12 +26,11 @@ class MyApp extends StatelessWidget {
 
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (context) => CounterProvider()),
+        ChangeNotifierProvider(create: (context) => ThemeProvider()),
         ChangeNotifierProvider(
-          create: (context) => CounterProvider(),
-        ),
-        ChangeNotifierProvider(
-          create: (context) => ThemeProvider(),
-        ),
+          create: (context) => ContactProvider(),
+        )
       ],
       builder: (context, child) {
         return MaterialApp(
@@ -39,10 +40,13 @@ class MyApp extends StatelessWidget {
           darkTheme: ThemeData.dark(useMaterial3: true),
           themeMode: Provider.of<ThemeProvider>(context).mode,
           // home: const MyHomePage(title: 'Flutter Demo Home Page'),
-          initialRoute: (prefs.getBool("isIntroOpen")??false) ? homePage: Navigator.defaultRouteName,
+          initialRoute: (prefs.getBool("isIntroOpen") ?? false)
+              ? homePage
+              : Navigator.defaultRouteName,
           routes: {
             Navigator.defaultRouteName: (context) => IntroScreen(),
             homePage: (context) => MyHomePage(),
+            addContact: (context) => AddContact(),
           },
         );
       },

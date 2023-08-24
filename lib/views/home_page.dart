@@ -1,11 +1,16 @@
+import 'package:counter_demo/model/contact_model.dart';
+import 'package:counter_demo/providers/contact_provider.dart';
 import 'package:counter_demo/providers/counter_provider.dart';
 import 'package:counter_demo/providers/theme_provider.dart';
+import 'package:counter_demo/utils/constant.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key,});
-
+  const MyHomePage({
+    super.key,
+  });
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -21,54 +26,39 @@ class _MyHomePageState extends State<MyHomePage> {
         actions: [
           InkWell(
             onTap: () {
-              Provider.of<ThemeProvider>(context,listen: false).changeTheme();
+              Provider.of<ThemeProvider>(context, listen: false).changeTheme();
             },
             child: Icon(Icons.dark_mode),
           )
         ],
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Consumer<CounterProvider>(
-              builder: (context, counterProvider, child) {
-                return Text(
-                  '${counterProvider.count}',
-                  style: Theme.of(context).textTheme.headlineMedium,
-                );
-              },
-            ),
-          ],
+      body: Consumer<ContactProvider>(
+        builder: (context, contactProvider, child) => ListView.builder(
+          itemCount: contactProvider.list.length,
+          itemBuilder: (context, index) {
+            Contact contact = contactProvider.list[index];
+            return ListTile(
+              leading: CircleAvatar(
+                child: Text("${contact.name.substring(0, 1)}".toUpperCase()),
+              ),
+              title: Text(contact.name),
+              subtitle: Text("${contact.phoneNumber}"),
+              trailing: IconButton(
+                  onPressed: () {
+                    // launchUrl(Uri.parse("tel:${contact.phoneNumber}"));
+                    launchUrl(Uri.parse("https://wa.me/${contact.phoneNumber}"));
+                  },
+                  icon: Icon(Icons.call)),
+            );
+          },
         ),
       ),
-      floatingActionButton: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          FloatingActionButton(
-            heroTag: "new",
-            onPressed: () {
-              // counterProvider.decrement();
-              Provider.of<CounterProvider>(context, listen: false).decrement();
-            },
-            tooltip: 'Increment',
-            child: const Icon(Icons.remove),
-          ),
-          SizedBox(
-            width: 10,
-          ),
-          FloatingActionButton(
-            onPressed: () {
-              // counterProvider.increment();
-              Provider.of<CounterProvider>(context, listen: false).increment();
-            },
-            tooltip: 'Increment',
-            child: const Icon(Icons.add),
-          ),
-        ],
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.pushNamed(context, addContact);
+        },
+        tooltip: 'Increment',
+        child: const Icon(Icons.add),
       ),
     );
   }
