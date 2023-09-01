@@ -44,7 +44,7 @@ class MyApp extends StatelessWidget {
               ? homePage
               : Navigator.defaultRouteName,
           routes: {
-            Navigator.defaultRouteName: (context) => IntroScreen(),
+            // Navigator.defaultRouteName: (context) => IntroScreen(),
             homePage: (context) => MyHomePage(),
             addContact: (context) => AddContact(),
           },

@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:counter_demo/model/contact_model.dart';
 import 'package:counter_demo/providers/contact_provider.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
@@ -45,6 +46,12 @@ class _AddContactState extends State<AddContact> {
     phoneNumber.text = widget.contact?["number"] ?? "";
     email.text = widget.contact?["email"] ?? "";
     file = XFile(widget.contact?["profile"] ?? "");
+
+    fName.text = "Virat";
+    lName.text = "Kohli";
+    phoneNumber.text = "8866332256";
+    email.text = "abc@gmailc.com";
+
     super.initState();
   }
 
@@ -63,8 +70,37 @@ class _AddContactState extends State<AddContact> {
         elevation: 3,
         actions: [
           InkWell(
-            onTap: () {
-              if (key.currentState?.validate() ?? false) {
+            onTap: () async {
+              var data = await showCupertinoModalPopup(
+                context: context,
+                builder: (context) {
+                  return CupertinoAlertDialog(
+                    title: Text("Save"),
+                    content: Text("Are you sure ?"),
+                    actions: [
+                      CupertinoDialogAction(
+                        child: Text("Ok"),
+                        onPressed: () {
+                          print("Ok");
+                          Navigator.pop(context, true);
+                        },
+                        isDefaultAction: true,
+                      ),
+                      CupertinoDialogAction(
+                        child: Text("Cancel"),
+                        onPressed: () {
+                          Navigator.pop(context, false);
+                          print("Cancel");
+                        },
+                        isDestructiveAction: true,
+                      ),
+                    ],
+                  );
+                },
+              );
+
+              print("object $data");
+              if ((key.currentState?.validate() ?? false) && (data ?? false)) {
                 String firstName = fName.text;
                 String lastName = lName.text;
                 int number = int.tryParse(phoneNumber.text) ?? 0;
@@ -86,151 +122,6 @@ class _AddContactState extends State<AddContact> {
           )
         ],
       ),
-      // body: SingleChildScrollView(
-      //   child: Form(
-      //     key: key,
-      //     child: Padding(
-      //       padding: const EdgeInsets.all(10),
-      //       child: Column(
-      //         crossAxisAlignment: CrossAxisAlignment.start,
-      //         children: [
-      //           Padding(
-      //             padding: const EdgeInsets.symmetric(vertical: 30),
-      //             child: Center(
-      //               child: Row(
-      //                 mainAxisAlignment: MainAxisAlignment.center,
-      //                 children: [
-      //                   InkWell(
-      //                     onTap: () async {
-      //                       var pickImage = await ImagePicker()
-      //                           .pickImage(source: ImageSource.gallery);
-      //                       file = pickImage;
-      //                       setState(() {});
-      //                     },
-      //                     child: CircleAvatar(
-      //                       backgroundColor: Colors.black38,
-      //                       radius: 38,
-      //                       backgroundImage: (file?.path ?? "").isNotEmpty
-      //                           ? FileImage(File(file?.path ?? ""))
-      //                           : null,
-      //                       child: Text("Add"),
-      //                     ),
-      //                   ),
-      //                 ],
-      //               ),
-      //             ),
-      //           ),
-      //           Text(
-      //             "First Name",
-      //             style: TextStyle(fontSize: 17),
-      //           ),
-      //           TextFormField(
-      //             controller: fName,
-      //             autovalidateMode: AutovalidateMode.onUserInteraction,
-      //             decoration: InputDecoration(
-      //               focusedBorder: OutlineInputBorder(
-      //                 borderRadius: BorderRadius.circular(3),
-      //               ),
-      //               enabledBorder: OutlineInputBorder(
-      //                 borderRadius: BorderRadius.circular(3),
-      //               ),
-      //               focusedErrorBorder: OutlineInputBorder(
-      //                 borderRadius: BorderRadius.circular(3),
-      //               ),
-      //               errorBorder: OutlineInputBorder(
-      //                 borderRadius: BorderRadius.circular(3),
-      //               ),
-      //             ),
-      //             validator: (value) {
-      //               if (value?.isEmpty ?? true) {
-      //                 return "Enter First Name";
-      //               } else {
-      //                 return null;
-      //               }
-      //             },
-      //           ),
-      //           SizedBox(height: 20),
-      //           Text(
-      //             "Last Name",
-      //             style: TextStyle(fontSize: 17),
-      //           ),
-      //           TextFormField(
-      //             controller: lName,
-      //             decoration: InputDecoration(
-      //                 focusedBorder: OutlineInputBorder(
-      //                   borderRadius: BorderRadius.circular(3),
-      //                 ),
-      //                 enabledBorder: OutlineInputBorder(
-      //                   borderRadius: BorderRadius.circular(3),
-      //                 )),
-      //             validator: (value) {
-      //               if (value?.isEmpty ?? true) {
-      //                 return "Enter Last Name";
-      //               } else {
-      //                 return null;
-      //               }
-      //             },
-      //           ),
-      //           SizedBox(height: 20),
-      //           Text(
-      //             "Phone Number",
-      //             style: TextStyle(fontSize: 17),
-      //           ),
-      //           TextFormField(
-      //             controller: phoneNumber,
-      //             inputFormatters: [
-      //               LengthLimitingTextInputFormatter(10),
-      //               FilteringTextInputFormatter.digitsOnly
-      //             ],
-      //             keyboardType: TextInputType.number,
-      //             decoration: InputDecoration(
-      //                 hintText: "+91 123456789",
-      //                 // prefixIconConstraints: BoxConstraints(),
-      //                 focusedBorder: OutlineInputBorder(
-      //                   borderRadius: BorderRadius.circular(3),
-      //                 ),
-      //                 enabledBorder: OutlineInputBorder(
-      //                   borderRadius: BorderRadius.circular(3),
-      //                 )),
-      //             validator: (value) {
-      //               if (value?.isEmpty ?? true) {
-      //                 return "Enter Phone number";
-      //               } else if (value!.length < 10) {
-      //                 return "Enter Valid number";
-      //               } else {
-      //                 return null;
-      //               }
-      //             },
-      //           ),
-      //           SizedBox(height: 20),
-      //           Text(
-      //             "Email Address",
-      //             style: TextStyle(fontSize: 17),
-      //           ),
-      //           TextFormField(
-      //             controller: email,
-      //             decoration: InputDecoration(
-      //                 hintText: "abc@gmail.com",
-      //                 focusedBorder: OutlineInputBorder(
-      //                   borderRadius: BorderRadius.circular(3),
-      //                 ),
-      //                 enabledBorder: OutlineInputBorder(
-      //                   borderRadius: BorderRadius.circular(3),
-      //                 )),
-      //             validator: (value) {
-      //               if (value?.isEmpty ?? true) {
-      //                 return "Enter Email Address";
-      //               } else {
-      //                 return null;
-      //               }
-      //             },
-      //           ),
-      //           SizedBox(height: 10)
-      //         ],
-      //       ),
-      //     ),
-      //   ),
-      // ),
       body: SingleChildScrollView(
         child: Form(
           key: key,
@@ -376,7 +267,67 @@ class _AddContactState extends State<AddContact> {
                       ],
                     );
                   },
-                )
+                ),
+                ElevatedButton.icon(
+                    onPressed: () {
+                      // showDatePicker(
+                      //   context: context,
+                      //   initialDate: DateTime.now(),
+                      //   currentDate: DateTime(2023, 08, 24),
+                      //   firstDate: DateTime(1990),
+                      //   lastDate: DateTime(2055),
+                      //   // initialDatePickerMode: DatePickerMode.year,
+                      //   // initialEntryMode: DatePickerEntryMode.inputOnly
+                      // ).then((value) {
+                      //   print(value);
+                      // });
+
+                      showCupertinoModalPopup(
+                        context: context,
+                        builder: (context) {
+                          return Container(
+                            height: 250,
+                            // width: 200,
+                            color: Colors.white,
+                            child: CupertinoDatePicker(
+                              onDateTimeChanged: (value) {
+                                print(value);
+                              },
+                              initialDateTime: DateTime.now(),
+                              maximumDate: DateTime(2055),
+                              // use24hFormat: true,
+                              mode: CupertinoDatePickerMode.date,
+                            ),
+                          );
+                        },
+                      );
+                    },
+                    icon: Icon(Icons.calendar_month),
+                    label: Text("Pick Date")),
+                ElevatedButton.icon(
+                    onPressed: () {
+                      // showTimePicker(
+                      //   context: context,
+                      //   initialTime: TimeOfDay.now(),
+                      // ).then((value) {
+                      //   print(value);
+                      // });
+                      showCupertinoModalPopup(
+                        context: context,
+                        builder: (context) {
+                          return Container(
+                            color: Colors.white,
+                            height: 200,
+                            child: CupertinoDatePicker(
+                              onDateTimeChanged: (value) {},
+                              mode: CupertinoDatePickerMode.time,
+                            ),
+                          );
+                        },
+                      );
+                    },
+                    icon: Icon(Icons.access_time),
+                    label: Text("Time Date"))
               ],
             ),
           ),
