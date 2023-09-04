@@ -41,6 +41,9 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
           bottom: TabBar(
             // isScrollable: true,
+            onTap: (value) {
+
+            },
             indicatorSize: TabBarIndicatorSize.label,
             automaticIndicatorColorAdjustment: false,
             unselectedLabelColor: Colors.grey,
@@ -98,7 +101,9 @@ class _MyHomePageState extends State<MyHomePage> {
                           //           Uri.parse("https://wa.me/0${contact.phoneNumber}"));
                           //     },
                           //     icon: Icon(Icons.call)),
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.pushNamed(context, pageScreen);
+                          },
                           trailing: PopupMenuButton(
                             itemBuilder: (context) {
                               return [

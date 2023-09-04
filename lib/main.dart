@@ -5,6 +5,7 @@ import 'package:counter_demo/utils/constant.dart';
 import 'package:counter_demo/views/add_contact.dart';
 import 'package:counter_demo/views/home_page.dart';
 import 'package:counter_demo/views/intro_screen.dart';
+import 'package:counter_demo/views/page_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -47,6 +48,7 @@ class MyApp extends StatelessWidget {
             // Navigator.defaultRouteName: (context) => IntroScreen(),
             homePage: (context) => MyHomePage(),
             addContact: (context) => AddContact(),
+            pageScreen: (context) => PageScreen(),
           },
         );
       },
