@@ -5,6 +5,7 @@ import 'package:counter_demo/providers/contact_provider.dart';
 import 'package:counter_demo/providers/counter_provider.dart';
 import 'package:counter_demo/providers/theme_provider.dart';
 import 'package:counter_demo/utils/constant.dart';
+import 'package:counter_demo/views/chat_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:local_auth/local_auth.dart';
@@ -26,7 +27,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     print("build");
     return DefaultTabController(
-      length: 2,
+      length: 3,
       child: Scaffold(
         appBar: AppBar(
           title: Text("Contact"),
@@ -54,6 +55,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 icon: Icon(Icons.person),
               ),
               Tab(text: "Contact"),
+              Tab(text: "Chat"),
             ],
           ),
         ),
@@ -389,7 +391,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 ],
               ),
             ),
-            Text("Ok")
+            Text("Ok"),
+            ChatScreen()
           ],
         ),
         floatingActionButton: FloatingActionButton(
